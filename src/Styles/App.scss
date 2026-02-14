@@ -1,0 +1,159 @@
+@use "./Init.scss";
+@use "./Var.scss";
+#content {
+  display: flex;
+}
+
+#drag-bar {
+  height: 4vh;
+  position: fixed;
+}
+
+.muliEle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  div {
+    height: fit-content;
+    position: absolute;
+    bottom: 0;
+    transform: translateY(150%);
+  }
+}
+
+// Title Bar & sideEffect
+#title-bar {
+  margin-top: Var.$title-bar-margin-top;
+  height: Var.$title-bar-height;
+  position: relative;
+}
+#sideEffect {
+  width: 100px;
+  height: 100vh;
+  flex-shrink: 0;
+  overflow-y: auto;
+  overflow-wrap: break-word;
+  border-right: 2px solid lightgoldenrodyellow;
+  box-shadow: 0 0 10px #fff;
+  background-color: Var.$sideEffect-bg-color;
+  color: Var.$sideEffect-font-color;
+  &:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  div {
+    height: fit-content;
+    color: Var.$sideEffect-font-color;
+  }
+  &-btn {
+    position: absolute;
+    width: 1.2em;
+    height: 1em;
+    border-radius: 0 20px 20px 0;
+    background: Var.$sideEffect-bg-color;
+    color: Var.$sideEffect-font-color;
+  }
+}
+#sundry {
+  * {
+    color: #fff;
+  }
+  height: Var.$means-height;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: max-content max-content;
+  grid-template-rows: max-content max-content;
+  justify-content: space-between;
+  row-gap: 30px;
+  padding: 10px 20px;
+  button {
+    height: 4em;
+    width: 8em;
+    padding: 0.6em 2em;
+    color: #000;
+
+    // Hook
+
+    align-self: center;
+    background-color: #fff;
+    background-position: 0 90%;
+    background-repeat: repeat no-repeat;
+    background-size: 4px 3px;
+    border: 5px solid rgba(255, 143, 0, 0.5);
+    box-shadow: rgba(255, 143, 0, 0.5) 15px 28px 25px -18px;
+    box-sizing: border-box;
+    padding: 0.75rem;
+    transition: all 235ms ease-in-out;
+    border-bottom-left-radius: 15px 255px;
+    border-bottom-right-radius: 225px 15px;
+    border-top-left-radius: 255px 15px;
+    border-top-right-radius: 15px 225px;
+
+    &:hover {
+      box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 8px -5px;
+      transform: translate3d(0, 2px, 0);
+    }
+
+    &:focus {
+      box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 4px -6px;
+    }
+    // Hook
+  }
+  &-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1.2em;
+    height: 1em;
+    border-radius: 20px 0 0 20px;
+    background-color: rgba(128, 128, 128, 0.5);
+    color: Var.$sideEffect-bg-color;
+  }
+}
+// Title Bar & sideEffect END
+
+#main-container {
+  background-attachment: fixed;
+  &-motivation {
+    height: 100%;
+    overflow-x: auto;
+    text-align: center;
+    font-weight: 500;
+    font-size: 8vh;
+    color: rgb(229, 18, 56);
+    text-shadow: 1px 1px 20px #924268;
+    div {
+      font-size: 8vh;
+      color: rgb(229, 18, 56);
+      text-shadow: 1px 1px 20px #924268;
+    }
+    &.empty {
+      caret-color: lightgoldenrodyellow;
+      &::before {
+        content: attr(data-placeholder);
+        color: rgb(256, 256, 256, 0.3);
+        text-shadow: 1px 1px 20px #bbb;
+        pointer-events: none;
+      }
+    }
+    &:focus {
+      outline: 0px;
+    }
+  }
+  &-means {
+    font-size: 6vh;
+    height: 100%;
+    overflow-y: auto;
+    div {
+      height: fit-content;
+    }
+
+    scroll-behavior: smooth;
+    &:focus {
+      outline: 0px;
+    }
+    &-container {
+      height: Var.$means-height;
+    }
+  }
+}

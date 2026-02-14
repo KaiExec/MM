@@ -1,0 +1,9 @@
+$title-bar-margin-top: 4vh;
+$title-bar-height: 10vh;
+$hr-total-height: 2.6vh;
+
+$means-height: calc(
+  100vh - #{$title-bar-margin-top} - #{$title-bar-height} - #{$hr-total-height}
+);
+$sideEffect-bg-color: rgba(0, 0, 0, 0.5);
+$sideEffect-font-color: #fffd88;
