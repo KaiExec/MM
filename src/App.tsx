@@ -27,20 +27,20 @@ export default function App() {
 
     useEffect(() => {
         if (sideEffectRef.current) {
-            sideEffectRef.current.textContent = content.current.side_effect
+            sideEffectRef.current.innerText = content.current.side_effect
         }
     }, [isExpand, importTrigger])
 
     useEffect(() => {
         if (meansRef.current) {
-            meansRef.current.textContent = content.current.means
+            meansRef.current.innerText = content.current.means
         }
 
     }, [isSundry, importTrigger])
 
     useEffect(() => {
         if (motivationRef.current) {
-            motivationRef.current.textContent = content.current.motivation
+            motivationRef.current.innerText = content.current.motivation
         }
     }, [importTrigger])
 
@@ -88,7 +88,7 @@ export default function App() {
                 menu,
                 menuOnLeftClick: true,
             };
-            const tray = await TrayIcon.new(options);
+            await TrayIcon.new(options);
         }
         init()
     }, [])
@@ -106,7 +106,7 @@ export default function App() {
                     ref={sideEffectRef} id="sideEffect" onBlur={
                         () => {
                             if (sideEffectRef.current) {
-                                content.current.side_effect = sideEffectRef.current.textContent || "";
+                                content.current.side_effect = sideEffectRef.current.innerText || "";
                             }
                         }
                     }
@@ -125,7 +125,7 @@ export default function App() {
                             onBlur={
                                 () => {
                                     if (motivationRef.current) {
-                                        content.current.motivation = motivationRef.current.textContent || "";
+                                        content.current.motivation = motivationRef.current.innerText || "";
                                     }
                                 }
                             }
@@ -177,7 +177,7 @@ export default function App() {
                                 onBlur={
                                     () => {
                                         if (meansRef.current) {
-                                            content.current.means = meansRef.current.textContent || "";
+                                            content.current.means = meansRef.current.innerText || "";
                                         }
                                     }
                                 }
