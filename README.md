@@ -1,6 +1,6 @@
 ## Motivation
 
-**MM** is designed for clarify the motivation.
+**MM** is designed for clarifying the motivation.
 Make movement less confusing and more effective.
 
 ## Feature
