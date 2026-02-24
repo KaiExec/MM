@@ -2,7 +2,7 @@
 pub async fn trigger_side_effect(win: tauri::WebviewWindow, is_expand: bool) {
     use tauri::{LogicalPosition, LogicalSize, Position, Size};
 
-    if let (Ok(size), Ok(postion)) = (win.outer_size(), win.outer_position()) {
+    if let (Ok(size), Ok(postion)) = (win.inner_size(), win.outer_position()) {
         let buffer = 100.0;
         let logical_size = size.to_logical(win.scale_factor().unwrap());
         let logical_position = postion.to_logical(win.scale_factor().unwrap());
