@@ -1,5 +1,4 @@
 use tauri::{AppHandle, Manager};
-mod icon;
 mod process;
 mod side_effect;
 
@@ -21,7 +20,6 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             side_effect::trigger_side_effect,
             save::save,
-            icon::icon,
             process::exit_suc,
             import::import
         ])
