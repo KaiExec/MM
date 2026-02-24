@@ -12,6 +12,10 @@ Make movement less confusing and more effective.
 - [x] Hotkey for displaying and hiding(*Ctrl+Shift+N*)
 - [x] Support Both Windows and MacOS
 
+## Some Glitches
+
+- [ ] Windows inital position and relocation has left margin
+
 ## Appearence
 
 ### Main UI
