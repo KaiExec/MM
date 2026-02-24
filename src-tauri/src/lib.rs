@@ -77,27 +77,31 @@ pub fn run() {
 
             // Treat as Accessory
             // No way to control it with tauri.conf.json!
-            {
-                use tauri::ActivationPolicy;
-                #[cfg(target_os = "macos")]
-                app.set_activation_policy(ActivationPolicy::Accessory);
-            }
+            #[cfg(target_os = "macos")]
+            app.set_activation_policy(tauri::ActivationPolicy::Accessory);
 
             // Blur window
             {
                 if let Some(win) = app.get_webview_window("main") {
-                    use window_vibrancy::{
-                        apply_vibrancy, NSVisualEffectMaterial, NSVisualEffectState,
-                    };
-
                     #[cfg(target_os = "macos")]
-                    apply_vibrancy(
-                        &win,
-                        NSVisualEffectMaterial::HudWindow,
-                        Some(NSVisualEffectState::Active),
-                        Some(0.0),
-                    )
-                    .expect("apply_vibrancy method Failed");
+                    {
+                        use window_vibrancy::{
+                            apply_vibrancy, NSVisualEffectMaterial, NSVisualEffectState,
+                        };
+                        apply_vibrancy(
+                            &win,
+                            NSVisualEffectMaterial::HudWindow,
+                            Some(NSVisualEffectState::Active),
+                            Some(0.0),
+                        )
+                        .expect("apply_vibrancy method Failed");
+                    }
+                    #[cfg(target_os = "windows")]
+                    {
+                        use window_vibrancy::apply_acrylic;
+                        apply_acrylic(&win, Some((20, 20, 20, 10)))
+                            .expect("Failed to apply acrylic effect");
+                    }
                 }
             }
 

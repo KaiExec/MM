@@ -1,6 +1,7 @@
 ## Motivation
 
 **MM** is designed for clarifying the motivation.
+
 Make movement less confusing and more effective.
 
 ## Feature
@@ -9,7 +10,7 @@ Make movement less confusing and more effective.
 - [x] Transparent background
 - [x] Hotkey for resizing and relocating(*Ctrl+Shift+R*)
 - [x] Hotkey for displaying and hiding(*Ctrl+Shift+N*)
-- [ ] Support Both Windows and MacOS
+- [x] Support Both Windows and MacOS
 
 ## Appearence
 
