@@ -32,7 +32,9 @@ pub fn run() {
                 Shortcut::new(Some(Modifiers::CONTROL | Modifiers::SHIFT), Code::KeyN);
             let hotkey_reset =
                 Shortcut::new(Some(Modifiers::CONTROL | Modifiers::SHIFT), Code::KeyR);
-            let hotkeys = [hotkey_trigger, hotkey_reset];
+            let hotkey_focus =
+                Shortcut::new(Some(Modifiers::CONTROL | Modifiers::SHIFT), Code::KeyF);
+            let hotkeys = [hotkey_trigger, hotkey_reset, hotkey_focus];
 
             Builder::new()
                 .with_shortcuts(hotkeys.clone())
@@ -60,6 +62,15 @@ pub fn run() {
                                     if win.is_visible().unwrap() {
                                         reset_position(app);
                                     }
+                                }
+                            }
+                        }
+                        if shortcut == &hotkey_focus {
+                            match event.state() {
+                                ShortcutState::Pressed => {}
+                                ShortcutState::Released => {
+                                    println!("Released: {:?}", shortcut);
+                                    win.set_focus().unwrap();
                                 }
                             }
                         }
