@@ -6,7 +6,7 @@ import { DTO, GlobalFontStyle } from './concept/utils.tsx'
 import { TrayIcon, TrayIconOptions } from '@tauri-apps/api/tray';
 import { defaultWindowIcon } from '@tauri-apps/api/app';
 import { Menu } from '@tauri-apps/api/menu';
-import { listen, UnlistenFn } from '@tauri-apps/api/event';
+import { listen } from '@tauri-apps/api/event';
 
 export default function App() {
     const [isExpand, setIsExpand] = useState(false)
@@ -65,7 +65,6 @@ export default function App() {
 
     useEffect(() => {
         const unlistenPromise = listen('save', () => {
-            console.log('Saving');
             invoke("save", {
                 content: content.current,
                 defaultly: saveDefaultlyRef.current
