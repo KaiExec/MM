@@ -6,6 +6,7 @@ import { DTO, GlobalFontStyle } from './concept/utils.tsx'
 import { TrayIcon, TrayIconOptions } from '@tauri-apps/api/tray';
 import { defaultWindowIcon } from '@tauri-apps/api/app';
 import { Menu } from '@tauri-apps/api/menu';
+import { listen, UnlistenFn } from '@tauri-apps/api/event';
 
 export default function App() {
     const [isExpand, setIsExpand] = useState(false)
@@ -23,6 +24,7 @@ export default function App() {
             side_effect: ""
         } as DTO
     )
+    const saveDefaultlyRef = useRef(isSaveDefaultly);
 
 
     useEffect(() => {
@@ -45,6 +47,7 @@ export default function App() {
     }, [importTrigger])
 
 
+
     // Function
     function handleMeansContainer(e: React.MouseEvent<HTMLElement>) {
         if (meansRef.current && e.target !== meansRef.current) {
@@ -56,8 +59,18 @@ export default function App() {
         invoke("save", { content: content, defaultly: defaultly })
     }
 
+    useEffect(() => {
+        saveDefaultlyRef.current = isSaveDefaultly;
+    }, [isSaveDefaultly]);
 
     useEffect(() => {
+        const unlistenPromise = listen('save', () => {
+            console.log('Saving');
+            invoke("save", {
+                content: content.current,
+                defaultly: saveDefaultlyRef.current
+            });
+        });
         async function init() {
             let icon;
             const TRAY_ID = "my-tray"
@@ -91,6 +104,9 @@ export default function App() {
             await TrayIcon.new(options);
         }
         init()
+        return () => {
+            unlistenPromise.then(fn => fn());
+        };
     }, [])
 
 

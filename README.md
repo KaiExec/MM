@@ -10,7 +10,8 @@ Make movement less confusing and more effective.
 - [x] Transparent background
 - [x] Hotkey for resizing and relocating(*Ctrl+Shift+R*)
 - [x] Hotkey for displaying and hiding(*Ctrl+Shift+N*)
-- [x] Hotkey for focus(*Ctrl+Shift+F*)
+- [x] Hotkey for focusing(*Ctrl+Shift+F*)
+- [x] Hotkey for saving(*Ctrl+Shift+S*)
 - [x] Support Both Windows and MacOS
 
 ## Some Glitches

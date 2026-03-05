@@ -1,4 +1,4 @@
-use tauri::{AppHandle, Manager};
+use tauri::{AppHandle, Emitter, Manager};
 mod process;
 mod side_effect;
 
@@ -34,7 +34,9 @@ pub fn run() {
                 Shortcut::new(Some(Modifiers::CONTROL | Modifiers::SHIFT), Code::KeyR);
             let hotkey_focus =
                 Shortcut::new(Some(Modifiers::CONTROL | Modifiers::SHIFT), Code::KeyF);
-            let hotkeys = [hotkey_trigger, hotkey_reset, hotkey_focus];
+            let hotkey_save =
+                Shortcut::new(Some(Modifiers::CONTROL | Modifiers::SHIFT), Code::KeyS);
+            let hotkeys = [hotkey_trigger, hotkey_reset, hotkey_focus, hotkey_save];
 
             Builder::new()
                 .with_shortcuts(hotkeys.clone())
@@ -71,6 +73,15 @@ pub fn run() {
                                 ShortcutState::Released => {
                                     println!("Released: {:?}", shortcut);
                                     win.set_focus().unwrap();
+                                }
+                            }
+                        }
+                        if shortcut == &hotkey_save {
+                            match event.state() {
+                                ShortcutState::Pressed => {}
+                                ShortcutState::Released => {
+                                    println!("Released: {:?}", shortcut);
+                                    app.emit("save", ()).unwrap()
                                 }
                             }
                         }
