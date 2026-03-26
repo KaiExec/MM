@@ -1,4 +1,5 @@
-use tauri::{AppHandle, Emitter, Manager};
+use tauri::{AppHandle, Manager};
+mod move_window;
 mod process;
 mod side_effect;
 
@@ -21,22 +22,20 @@ pub fn run() {
             side_effect::trigger_side_effect,
             save::save,
             process::exit_suc,
-            import::import
+            import::import,
+            move_window::move_window
         ])
         .plugin(tauri_plugin_positioner::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin({
             use tauri_plugin_global_shortcut::{Builder, Code, Modifiers, Shortcut, ShortcutState};
 
-            let hotkey_trigger =
-                Shortcut::new(Some(Modifiers::CONTROL | Modifiers::SHIFT), Code::KeyN);
-            let hotkey_reset =
-                Shortcut::new(Some(Modifiers::CONTROL | Modifiers::SHIFT), Code::KeyR);
-            let hotkey_focus =
-                Shortcut::new(Some(Modifiers::CONTROL | Modifiers::SHIFT), Code::KeyF);
-            let hotkey_save =
-                Shortcut::new(Some(Modifiers::CONTROL | Modifiers::SHIFT), Code::KeyS);
-            let hotkeys = [hotkey_trigger, hotkey_reset, hotkey_focus, hotkey_save];
+            let (hotkey_trigger, hotkey_reset, hotkey_focus) = (
+                Shortcut::new(Some(Modifiers::CONTROL | Modifiers::SHIFT), Code::KeyN),
+                Shortcut::new(Some(Modifiers::CONTROL | Modifiers::SHIFT), Code::KeyR),
+                Shortcut::new(Some(Modifiers::CONTROL | Modifiers::SHIFT), Code::KeyF),
+            );
+            let hotkeys = [hotkey_trigger, hotkey_reset, hotkey_focus];
 
             Builder::new()
                 .with_shortcuts(hotkeys.clone())
@@ -73,15 +72,6 @@ pub fn run() {
                                 ShortcutState::Released => {
                                     println!("Released: {:?}", shortcut);
                                     win.set_focus().unwrap();
-                                }
-                            }
-                        }
-                        if shortcut == &hotkey_save {
-                            match event.state() {
-                                ShortcutState::Pressed => {}
-                                ShortcutState::Released => {
-                                    println!("Released: {:?}", shortcut);
-                                    app.emit("save", ()).unwrap()
                                 }
                             }
                         }

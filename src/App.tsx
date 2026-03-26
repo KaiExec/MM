@@ -6,7 +6,6 @@ import { DTO, GlobalFontStyle } from './concept/utils.tsx'
 import { TrayIcon, TrayIconOptions } from '@tauri-apps/api/tray';
 import { defaultWindowIcon } from '@tauri-apps/api/app';
 import { Menu } from '@tauri-apps/api/menu';
-import { listen } from '@tauri-apps/api/event';
 
 export default function App() {
     const [isExpand, setIsExpand] = useState(false)
@@ -25,6 +24,8 @@ export default function App() {
         } as DTO
     )
     const saveDefaultlyRef = useRef(isSaveDefaultly);
+
+    type Direction = 'h' | 'j' | 'k' | 'l';
 
 
     useEffect(() => {
@@ -64,13 +65,22 @@ export default function App() {
     }, [isSaveDefaultly]);
 
     useEffect(() => {
-        const unlistenPromise = listen('save', () => {
-            invoke("save", {
-                content: content.current,
-                defaultly: saveDefaultlyRef.current
-            });
-        });
+        const keyHandler = (event: KeyboardEvent) => {
+            if (!(event.ctrlKey || event.metaKey)) return;
+            const key = event.key.toLowerCase();
+            if (key === 's') {
+                event.preventDefault();
+                invoke("save", { content: content.current, defaultly: saveDefaultlyRef.current });
+                return;
+            }
+            const moveKeys = ['u', 'i', 'o', 'p'];
+            if (moveKeys.includes(key)) {
+                event.preventDefault();
+                invoke("move_window", { direction: key });
+            }
+        }
         async function init() {
+            window.addEventListener('keyup', keyHandler);
             let icon;
             const TRAY_ID = "my-tray"
             try {
@@ -104,7 +114,7 @@ export default function App() {
         }
         init()
         return () => {
-            unlistenPromise.then(fn => fn());
+            window.removeEventListener('keyup', keyHandler);
         };
     }, [])
 
