@@ -1,4 +1,5 @@
 use tauri::{AppHandle, Emitter, Manager};
+mod move_window;
 mod process;
 mod side_effect;
 
@@ -21,7 +22,8 @@ pub fn run() {
             side_effect::trigger_side_effect,
             save::save,
             process::exit_suc,
-            import::import
+            import::import,
+            move_window::move_window
         ])
         .plugin(tauri_plugin_positioner::init())
         .plugin(tauri_plugin_dialog::init())

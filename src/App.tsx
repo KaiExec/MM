@@ -6,7 +6,6 @@ import { DTO, GlobalFontStyle } from './concept/utils.tsx'
 import { TrayIcon, TrayIconOptions } from '@tauri-apps/api/tray';
 import { defaultWindowIcon } from '@tauri-apps/api/app';
 import { Menu } from '@tauri-apps/api/menu';
-import { listen } from '@tauri-apps/api/event';
 
 export default function App() {
     const [isExpand, setIsExpand] = useState(false)
@@ -25,7 +24,7 @@ export default function App() {
         } as DTO
     )
     const saveDefaultlyRef = useRef(isSaveDefaultly);
-
+    const moveWindowRepeater = useRef<number | null>(null);
 
     useEffect(() => {
         if (sideEffectRef.current) {
@@ -64,13 +63,41 @@ export default function App() {
     }, [isSaveDefaultly]);
 
     useEffect(() => {
-        const unlistenPromise = listen('save', () => {
-            invoke("save", {
-                content: content.current,
-                defaultly: saveDefaultlyRef.current
-            });
-        });
+        const saveKeyHandler =
+            (event: KeyboardEvent) => {
+                if (!(event.ctrlKey || event.metaKey)) return;
+                const key = event.key.toLowerCase();
+                if (key === 's') {
+                    event.preventDefault();
+                    invoke("save", { content: content.current, defaultly: saveDefaultlyRef.current });
+                    return;
+                }
+            }
+        const moveKeyStartHandler = (event: KeyboardEvent) => {
+            const moveKeys = ['u', 'i', 'o', 'p'];
+            const key = event.key.toLowerCase();
+            if (moveKeys.includes(key)) {
+                event.preventDefault();
+                invoke("move_window", { direction: key });
+                if (moveWindowRepeater.current !== null) {
+                    window.clearInterval(moveWindowRepeater.current);
+                }
+                moveWindowRepeater.current = window.setInterval(() => {
+                    invoke("move_window", { direction: key });
+                }, 50);
+            }
+        }
+
+        const moveKeyEndHandler = () => {
+            if (moveWindowRepeater.current !== null) {
+                window.clearInterval(moveWindowRepeater.current);
+                moveWindowRepeater.current = null;
+            }
+        }
         async function init() {
+            window.addEventListener('keyup', saveKeyHandler);
+            window.addEventListener('keydown', moveKeyStartHandler);
+            window.addEventListener('keyup', moveKeyEndHandler);
             let icon;
             const TRAY_ID = "my-tray"
             try {
@@ -104,7 +131,13 @@ export default function App() {
         }
         init()
         return () => {
-            unlistenPromise.then(fn => fn());
+            window.removeEventListener('keyup', saveKeyHandler);
+            window.removeEventListener('keydown', moveKeyStartHandler);
+            window.removeEventListener('keyup', moveKeyEndHandler);
+            if (moveWindowRepeater.current !== null) {
+                window.clearInterval(moveWindowRepeater.current);
+                moveWindowRepeater.current = null;
+            }
         };
     }, [])
 
