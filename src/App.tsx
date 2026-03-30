@@ -76,7 +76,7 @@ export default function App() {
         const moveKeyStartHandler = (event: KeyboardEvent) => {
             const moveKeys = ['u', 'i', 'o', 'p'];
             const key = event.key.toLowerCase();
-            if (moveKeys.includes(key)) {
+            if (moveKeys.includes(key) && (event.metaKey || event.ctrlKey)) {
                 event.preventDefault();
                 invoke("move_window", { direction: key });
                 if (moveWindowRepeater.current !== null) {
